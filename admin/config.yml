@@ -1,20 +1,22 @@
 backend:
-  name: github 
-  repo: ВАШ_НИКНЕЙМ/ВАШ_РЕПОЗИТОРИЙ # Например, BoRzoY/Portfolio-3D
-  branch: main # или master, в зависимости от имени вашей основной ветки
+  name: git-gateway # Используем Netlify Git Gateway для безопасного подключения к GitHub
+  branch: main # Имя вашей основной ветки на GitHub (может быть "master")
 
-media_folder: "images/uploads" # Куда сохранять загружаемые файлы
-public_folder: "/images/uploads" # Публичный путь к медиафайлам
+# Куда CMS должна сохранять загруженные файлы с ПК
+media_folder: "images/uploads" 
+# Публичный путь к этим файлам, который будет использоваться на сайте
+public_folder: "/images/uploads"
 
 collections:
-  - name: "portfolio" # Техническое имя коллекции
-    label: "Работы Портфолио" # Имя в интерфейсе CMS
-    folder: "_data/portfolio" # Куда сохранять файлы данных (на GitHub)
-    create: true # Разрешить создание новых записей
-    slug: "{{name}}" # Имя файла будет равно названию работы
+  - name: "portfolio"
+    label: "Работы Портфолио"
+    folder: "_data/portfolio" # Файлы данных будут храниться в этой папке на GitHub
+    create: true 
+    slug: "{{name}}" 
+    extension: "json" # Тип файла данных (нам нужен JSON для простоты)
 
     fields:
-      - {label: "Название Персонажа", name: "name", widget: "string"}
+      - {label: "Название Персонажа", name: "name", widget: "string", required: true}
       - {label: "Превью (thumb)", name: "thumb", widget: "image", required: true}
 
       - label: "Галерея Изображений"
@@ -22,11 +24,11 @@ collections:
         widget: "list"
         fields:
           - {label: "Изображение", name: "image_path", widget: "image", required: true}
-          - {label: "Комментарий", name: "caption", widget: "string", required: false}
 
       - label: "Видеоматериалы"
         name: "videos"
         widget: "list"
         fields:
-          - {label: "Файл Видео", name: "video_path", widget: "file", required: true}
-          - {label: "Комментарий", name: "comment", widget: "string", required: true}
+          # ВАЖНО: Виджет "file" позволяет загружать MP4, MOV и т.д.
+          - {label: "Файл Видео (загрузка с ПК)", name: "video_path", widget: "file", required: true}
+          - {label: "Комментарий", name: "comment", widget: "string", required: false}
