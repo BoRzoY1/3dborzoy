@@ -1,4 +1,4 @@
-// script.js (Финальная версия с поддержкой GDrive и сохранением админки)
+// script.js (Финальная версия с Google Drive и Админ-панелью)
 
 const ADMIN_PASSWORD = "admin123"; 
 let isAdminMode = false;
@@ -14,7 +14,7 @@ var zoomModal = document.getElementById('zoom-modal');
 var zoomContent = document.getElementById('zoom-content');
 
 
-// --- НОВАЯ ФУНКЦИЯ: Преобразование ссылки Google Drive ---
+// --- НОВАЯ/ОБНОВЛЕННАЯ ФУНКЦИЯ: Преобразование ссылки Google Drive ---
 function transformGoogleDriveLink(link) {
     // Регулярное выражение для извлечения ID, расположенного после /d/
     const match = link.match(/\/d\/([a-zA-Z0-9_-]+)/);
@@ -24,19 +24,21 @@ function transformGoogleDriveLink(link) {
         // Формат для прямого скачивания/встраивания
         return `https://drive.google.com/uc?export=download&id=${fileId}`;
     }
-    // Если это локальный путь, возвращаем как есть
+    // Если это локальный путь или другая внешняя ссылка, возвращаем как есть
     return link;
 }
 
 
-// --- Инициализация и Структура Данных (Не изменена) ---
+// --- Инициализация и Структура Данных ---
 const defaultPortfolio = [
     { 
         name: 'Кибер-Ниндзя V1', 
         thumb: 'images/char_thumb_1.jpg', 
         images: ['images/cyber_full.jpg', 'images/cyber_wireframe.jpg', 'images/cyber_mesh.jpg'],
         videos: [
-            { path: 'videos/cyber_turnaround.mp4', comment: 'Полный оборот персонажа в реальном времени (Unreal Engine 5)' },
+            // *** ПРИМЕР: Здесь должен быть URL Google Drive, если вы не используете локальные файлы ***
+            // { path: 'https://drive.google.com/file/d/ID_ВАШЕГО_ФАЙЛА/view?usp=sharing', comment: 'Полный оборот персонажа' },
+            { path: 'videos/cyber_turnaround.mp4', comment: 'Полный оборот персонажа в реальном времени (Unreal Engine 5)' },
             { path: 'videos/cyber_anim.mp4', comment: 'Демонстрация базовой анимации атаки и бега.' }
         ]
     },
@@ -57,7 +59,7 @@ function savePortfolio() {
     renderPortfolio();
 }
 
-// --- Функции Рендеринга Превью и Админки (Не изменены) ---
+// --- Функции Рендеринга Превью и Админки (Сохранены) ---
 function renderPortfolio() {
     gallery.innerHTML = '';
     portfolioData.forEach((item, index) => {
@@ -196,15 +198,14 @@ function openModal(index) {
             const container = document.createElement('div');
             container.classList.add('video-item');
             
-            // *** ИСПРАВЛЕНИЕ: Преобразуем путь видео, чтобы поддержать Google Drive ***
+            // *** КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: Преобразуем путь видео для поддержки Google Drive ***
             const videoSource = transformGoogleDriveLink(videoItem.path);
 
             const video = document.createElement('video');
             video.src = videoSource; // Используем преобразованную ссылку
-            // *** Убеждаемся, что нет атрибута 'autoplay' при создании ***
             video.controls = false; 
             video.loop = true;
-            video.muted = true; // Видео всегда muted, пока не вступит в фокус
+            video.muted = true;
             
             // ***Показываем управление только при наведении***
             video.onmouseenter = () => { video.controls = true; };
