@@ -1,0 +1,32 @@
+backend:
+  name: github 
+  repo: ВАШ_НИКНЕЙМ/ВАШ_РЕПОЗИТОРИЙ # Например, BoRzoY/Portfolio-3D
+  branch: main # или master, в зависимости от имени вашей основной ветки
+
+media_folder: "images/uploads" # Куда сохранять загружаемые файлы
+public_folder: "/images/uploads" # Публичный путь к медиафайлам
+
+collections:
+  - name: "portfolio" # Техническое имя коллекции
+    label: "Работы Портфолио" # Имя в интерфейсе CMS
+    folder: "_data/portfolio" # Куда сохранять файлы данных (на GitHub)
+    create: true # Разрешить создание новых записей
+    slug: "{{name}}" # Имя файла будет равно названию работы
+
+    fields:
+      - {label: "Название Персонажа", name: "name", widget: "string"}
+      - {label: "Превью (thumb)", name: "thumb", widget: "image", required: true}
+
+      - label: "Галерея Изображений"
+        name: "images"
+        widget: "list"
+        fields:
+          - {label: "Изображение", name: "image_path", widget: "image", required: true}
+          - {label: "Комментарий", name: "caption", widget: "string", required: false}
+
+      - label: "Видеоматериалы"
+        name: "videos"
+        widget: "list"
+        fields:
+          - {label: "Файл Видео", name: "video_path", widget: "file", required: true}
+          - {label: "Комментарий", name: "comment", widget: "string", required: true}
